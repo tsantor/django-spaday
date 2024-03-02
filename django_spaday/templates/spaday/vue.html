@@ -1,0 +1,34 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <meta name="description" content="{{ PROJECT_TITLE }}">
+  <meta name="author" content="Tim Santor">
+  <title>{{ PROJECT_TITLE }} </title>
+  {% include "includes/favicons.html" %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+
+  <!-- vue app specific imports -->
+  <link href="{% static 'vue-frontend/css/app.css' %}" rel="preload" as="style">
+  <link href="{% static 'vue-frontend/css/chunk-vendors.css' %}" rel="preload" as="style">
+  <link href="{% static 'vue-frontend/js/app.js' %}" rel="preload" as="script">
+  <link href="{% static 'vue-frontend/js/chunk-vendors.js' %}" rel="preload" as="script">
+
+  <link href="{% static 'vue-frontend/css/chunk-vendors.css' %}" rel="stylesheet">
+  <link href="{% static 'vue-frontend/css/app.css' %}" rel="stylesheet">
+</head>
+
+<body><noscript><strong>We're sorry but Xapp Admin doesn't work properly without JavaScript enabled. Please enable it
+      to continue.</strong></noscript>
+  <div id="app"></div>
+    {% csrf_token %}
+  <script src="{% static 'vue-frontend/js/chunk-vendors.js' %}"></script>
+  <script src="{% static 'vue-frontend/js/app.js' %}"></script>
+</body>
+
+</html>

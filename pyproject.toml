@@ -1,0 +1,29 @@
+# ==== pytest ====
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--ds=test.settings --reuse-db"
+python_files = ["tests.py", "test_*.py"]
+norecursedirs = ["node_modules"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+
+
+# ==== Coverage ====
+[tool.coverage.run]
+include = ["django_spaday/**"]
+omit = ["*/migrations/*", "*/tests/*"]
+plugins = ["django_coverage_plugin"]
+
+
+# ==== black ====
+[tool.black]
+line-length = 119
+target-version = ['py311']
+
+
+# ==== isort ====
+[tool.isort]
+profile = "black"
+line_length = 119
+known_first_party = ["django_spaday", "config"]
+skip = ["venv/"]
+skip_glob = ["**/migrations/*.py"]
