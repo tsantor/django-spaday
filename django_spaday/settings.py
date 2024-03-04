@@ -15,6 +15,7 @@ This module provides the `api_setting` object, that is used to access
 Django SPA Day settings, checking for user settings first, then falling
 back to the defaults.
 """
+
 from django.conf import settings
 from django.test.signals import setting_changed
 from django.utils.module_loading import import_string

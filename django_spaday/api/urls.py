@@ -20,5 +20,5 @@ urlpatterns = [
     # path("csrf/", views.CsrfTokenView.as_view()),
     # Override dj_rest_auth LoginView
     # TODO: Test this
-    # path("auth/login/", views.MyLoginView.as_view(), name="spaday_login"),
+    path("auth/login/", views.MyLoginView.as_view(), name="spaday-login"),
 ]

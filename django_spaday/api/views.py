@@ -103,7 +103,7 @@ class UserViewSet(MyModelViewSet):
 
 class GroupViewSet(MyModelViewSet):
     http_method_names = ["get", "post", "put", "delete"]
-    queryset = Group.objects.all()
+    queryset = Group.objects.all().order_by("name")
     permission_classes = (IsAuthenticated,)
     pagination_class = StandardPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]

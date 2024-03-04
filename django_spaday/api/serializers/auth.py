@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 class PermissionSerializer(serializers.ModelSerializer):
-    """Serializer for v-combobox."""
+    """Serializer for v-combobox. This can be overriden in the SPA_DAY settings."""
 
     value = serializers.IntegerField(source="pk")
     text = serializers.CharField(source="name")
@@ -22,7 +22,11 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 
 class GroupAddUserSerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), source="user_set")
+    users = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=User.objects.all(),
+        source="user_set",
+    )
 
     class Meta:
         model = Group
@@ -30,14 +34,16 @@ class GroupAddUserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         users = validated_data.pop("user_set", [])
-        # instance = super().update(instance, validated_data)
-        for u in users:
-            instance.user_set.add(u)
+        instance.user_set.add(*users)
         return instance
 
 
 class GroupRemoveUserSerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), source="user_set")
+    users = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=User.objects.all(),
+        source="user_set",
+    )
 
     class Meta:
         model = Group
@@ -45,13 +51,13 @@ class GroupRemoveUserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         users = validated_data.pop("user_set", [])
-        # instance = super().update(instance, validated_data)
-        for u in users:
-            instance.user_set.remove(u)
+        instance.user_set.remove(*users)
         return instance
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    """This can be overriden in the SPA_DAY settings."""
+
     num_users = serializers.SerializerMethodField()
 
     # users = serializers.PrimaryKeyRelatedField(
@@ -80,6 +86,8 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """This can be overriden in the SPA_DAY settings."""
+
     initials = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
 
@@ -115,14 +123,17 @@ class UserSerializer(serializers.ModelSerializer):
             first_name = instance.first_name[0]
             last_name = instance.last_name[0]
             return f"{first_name}{last_name}".upper()
+        return ""
 
     def get_full_name(self, instance) -> str:
         if instance.first_name and instance.last_name:
             return f"{instance.first_name} {instance.last_name}"
+        return ""
 
     def create(self, validated_data):
         validated_data["email"] = validated_data["email"].lower()
-        validated_data["username"] = validated_data["email"]
+        if "username" in User._meta.get_fields():
+            validated_data["username"] = validated_data["email"]
         password = validated_data.pop("password")
         # groups = validated_data.pop("groups")
         # permissions = validated_data.pop("user_permissions")
@@ -136,8 +147,13 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        validated_data["email"] = validated_data["email"].lower()
-        validated_data["username"] = validated_data["email"]
+        # This ensures the username is email, and email is lower case
+        if "email" in validated_data:
+            validated_data["email"] = validated_data["email"].lower()
+
+        if "username" in User._meta.get_fields():
+            validated_data["username"] = validated_data.pop("email", None)
+
         # groups = validated_data.pop("groups")
         # permissions = validated_data.pop("user_permissions")
 
@@ -150,6 +166,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
+    """This can be overriden in the SPA_DAY settings."""
+
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
     # old_password = serializers.CharField(write_only=True, required=True)
@@ -179,7 +197,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class UserAuthSerializer(serializers.ModelSerializer):
-    """Serializer for User Auth only."""
+    """This can be overriden in the SPA_DAY settings."""
 
     initials = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
@@ -215,6 +233,8 @@ class UserAuthSerializer(serializers.ModelSerializer):
 
 
 class LastLoginSerializer(serializers.ModelSerializer):
+    """This can be overriden in the SPA_DAY settings."""
+
     class Meta:
         model = User
         fields = (

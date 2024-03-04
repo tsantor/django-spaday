@@ -21,6 +21,8 @@ def media_storage(settings, tmpdir):
 @pytest.fixture
 def user():
     return User.objects.create_user(
+        first_name="User",
+        last_name="User",
         username="user@test.com",
         email="user@test.com",
         password="testpass",
@@ -30,6 +32,8 @@ def user():
 @pytest.fixture
 def staff():
     return User.objects.create_user(
+        first_name="Staff",
+        last_name="User",
         username="staff@test.com",
         email="staff@test.com",
         password="testpass",
@@ -40,6 +44,8 @@ def staff():
 @pytest.fixture
 def superuser():
     return factories.UserFactory(
+        first_name="Super",
+        last_name="User",
         username="superuser@test.com",
         email="superuser@test.com",
         password="testpass",

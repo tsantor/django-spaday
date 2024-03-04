@@ -31,9 +31,7 @@ def group():
 
 @pytest.fixture
 def log_entry(user):
-    entry = LogEntryFactory.create(actor=user)
-    print(entry.__dict__)
-    return entry
+    return LogEntryFactory.create(actor=user)
 
 
 @pytest.fixture
