@@ -72,3 +72,6 @@ REST_USE_JWT = True
 1. `python manage.py makemigrations`
 1. `python manage.py migrate`
 1. `python manage.py runserver`
+
+Visit `http://127.0.0.1:8000/djadmin/` for the Django Admin
+Visit `http://127.0.0.1:8000/admin/` for the Vue Admin

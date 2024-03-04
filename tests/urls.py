@@ -14,7 +14,7 @@ admin.site.enable_nav_sidebar = False
 
 
 urlpatterns = [
-    path(r"admin/", admin.site.urls),
+    path(r"djadmin/", admin.site.urls),
     path("", include("django_spaday.urls")),
 ]
 

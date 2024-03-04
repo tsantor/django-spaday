@@ -2,6 +2,8 @@ import pytest
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
+from .factories import GroupFactory, LogEntryFactory, TaskResultFactory
+
 
 @pytest.fixture
 def content_type():
@@ -11,5 +13,29 @@ def content_type():
 @pytest.fixture
 def permission(content_type):
     return Permission.objects.create(
-        codename="test_permission", name="Test Permission", content_type=content_type
+        codename="test_permission",
+        name="Test Permission",
+        content_type=content_type,
     )
+
+
+@pytest.fixture
+def group():
+    return GroupFactory.create()
+
+
+# @pytest.fixture
+# def user(group):
+#     return UserFactory.create(groups=[group]
+
+
+@pytest.fixture
+def log_entry(user):
+    entry = LogEntryFactory.create(actor=user)
+    print(entry.__dict__)
+    return entry
+
+
+@pytest.fixture
+def task_result():
+    return TaskResultFactory.create()

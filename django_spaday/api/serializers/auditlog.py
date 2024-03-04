@@ -58,6 +58,7 @@ class LogEntrySerializer(serializers.ModelSerializer):
             "0": "Create",
             "1": "Update",
             "2": "Delete",
+            "3": "Access",
         }
         if str(obj.action) in actions:
             return actions.get(str(obj.action))

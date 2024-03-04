@@ -55,7 +55,6 @@ class MyLoginView(LoginView):
 class UserViewSet(MyModelViewSet):
     http_method_names = ["get", "post", "put", "delete"]
     queryset = User.objects.all().order_by("last_name")
-    # serializer_class = api_settings.USER_SERIALIZER
     permission_classes = (IsAuthenticated,)  # DjangoModelPermissions
     pagination_class = StandardPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -87,13 +86,17 @@ class UserViewSet(MyModelViewSet):
     @action(detail=False, methods=["get"], url_path=r"recent-logins")
     def recent_logins(self, request):
         if request.user.is_superuser:
-            recent_users = User.objects.exclude(last_login__isnull=True).order_by("-last_login")[:10]
+            recent_users = User.objects.exclude(last_login__isnull=True, is_staff=False).order_by("-last_login")[:10]
         else:
-            recent_users = (
-                User.objects.filter(company=request.user.company)
-                .exclude(last_login__isnull=True)
-                .order_by("-last_login")[:10]
-            )
+            # TODO: Clean this up as not all users have a company
+            if hasattr(request.user, "company"):
+                recent_users = (
+                    User.objects.filter(company=request.user.company)
+                    .exclude(last_login__isnull=True, is_staff=False)
+                    .order_by("-last_login")[:10]
+                )
+            else:
+                recent_users = User.objects.filter(pk=request.user.pk, is_staff=True)
         serializer = self.get_serializer(recent_users, many=True)
         return Response(serializer.data)
 
@@ -101,7 +104,6 @@ class UserViewSet(MyModelViewSet):
 class GroupViewSet(MyModelViewSet):
     http_method_names = ["get", "post", "put", "delete"]
     queryset = Group.objects.all()
-    # serializer_class = api_settings.GROUP_SERIALIZER
     permission_classes = (IsAuthenticated,)
     pagination_class = StandardPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]

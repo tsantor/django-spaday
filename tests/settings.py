@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "auditlog",
     "django_perm_filter",
     "django_celery_results",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
+# USE_L10N = True
 
 USE_TZ = True
 
@@ -192,6 +193,7 @@ REST_AUTH = {
     "USER_DETAILS_SERIALIZER": "django_spaday.api.serializers.UserAuthSerializer",
     "JWT_AUTH_COOKIE": "jwt-auth",
     "JWT_AUTH_REFRESH_COOKIE": "jwt-refresh-token",
+    "JWT_AUTH_HTTPONLY": False,  # False means js can access the cookie
 }
 
 # djangorestframework-simplejwt

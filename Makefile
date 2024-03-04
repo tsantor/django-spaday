@@ -55,8 +55,17 @@ scratch: env reqs migrate createsuperuser serve  ## Create environment, install 
 pytest:  ## Run tests
 	pytest -v -x
 
+pytest_verbose:  ## Run tests
+	pytest -vs
+
 coverage:  ## Run tests with coverage
 	coverage run -m pytest && coverage html
+
+coverage_verbose:  ## Run tests with coverage
+	coverage run -m pytest -vs && coverage html
+
+coverage_skip:  ## Run tests with coverage
+	coverage run -m pytest -vs && coverage html
 	# --skip-covered
 
 open_coverage:  ## open coverage report
