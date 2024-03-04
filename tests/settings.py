@@ -183,18 +183,16 @@ SPECTACULAR_SETTINGS = {
 }
 
 # dj-rest-auth
+# https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
 # -------------------------------------------------------------------------------
-REST_AUTH_SERIALIZERS = {
+REST_AUTH = {
+    "USE_JWT": True,
+    "SESSION_LOGIN": False,
+    "TOKEN_MODEL": None,
     "USER_DETAILS_SERIALIZER": "django_spaday.api.serializers.UserAuthSerializer",
+    "JWT_AUTH_COOKIE": "jwt-auth",
+    "JWT_AUTH_REFRESH_COOKIE": "jwt-refresh-token",
 }
-
-REST_AUTH_TOKEN_MODEL = None
-
-REST_SESSION_LOGIN = False
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = "jwt-auth"
-# JWT_AUTH_COOKIE = 'jwt-access-token'
-# JWT_AUTH_REFRESH_COOKIE = 'jwt-refresh-token'
 
 # djangorestframework-simplejwt
 # -------------------------------------------------------------------------------

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import (
@@ -9,11 +8,14 @@ from drf_spectacular.views import (
 
 from . import api_router
 
+admin.site.enable_nav_sidebar = False
+
 # from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
     path(r"admin/", admin.site.urls),
+    path("", include("django_spaday.urls")),
 ]
 
 # API URLS
@@ -28,7 +30,5 @@ urlpatterns += [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
-    path(
-        "api/redoc/", SpectacularRedocView.as_view(url_name="api-schema"), name="redoc"
-    ),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="api-schema"), name="redoc"),
 ]
