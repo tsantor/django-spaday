@@ -1,9 +1,8 @@
 import factory
 from auditlog.models import LogEntry
 from celery import states
-from django.contrib.admin.models import ADDITION
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django_celery_results.models import TaskResult
 
@@ -25,20 +24,21 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(lambda obj: f"{obj.username}@example.com")
     password = factory.PostGenerationMethodCall("set_password", "defaultpassword")
 
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("last_name")
+
 
 class LogEntryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LogEntry
 
-    content_type = factory.LazyAttribute(lambda _: ContentType.objects.get_for_model(LogEntry))
+    content_type = factory.LazyAttribute(lambda _: ContentType.objects.get_for_model(User))
     # content_type = factory.SubFactory(ContentTypeFactory)
     object_pk = factory.Faker("pyint")
     object_repr = factory.Faker("word")
-
     action = LogEntry.Action.CREATE
 
-    # changes = {"name": ["Old", "New"]}
-    changes = None
+    changes = {}
     actor = factory.SubFactory(UserFactory)
 
 

@@ -1,5 +1,6 @@
 import pytest
-from django.contrib.auth import get_user_model
+
+from django_spaday.tests.factories import UserFactory
 
 from ..utils import get_deleted_objects
 
@@ -7,7 +8,7 @@ from ..utils import get_deleted_objects
 @pytest.mark.django_db
 def test_get_deleted_objects():
     # Create a User instance to test with
-    user = get_user_model().objects.create_user(username="testuser", password="12345")
+    user = UserFactory.create()
 
     # Call the function with the User instance
     to_delete, model_count, protected = get_deleted_objects([user])

@@ -14,9 +14,6 @@ def get_deleted_objects(objs):
 
     to_delete = collector.nested(format_callback)
     protected = [format_callback(obj) for obj in collector.protected]
-    model_count = {
-        model._meta.verbose_name_plural: len(objs)
-        for model, objs in collector.model_objs.items()
-    }
+    model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
 
     return to_delete, model_count, protected

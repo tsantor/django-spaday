@@ -5,6 +5,7 @@ from django.db import models
 
 User = get_user_model()
 
+
 class GenericPerms(models.Model):
     class Meta:
         # No database table for this model
@@ -15,5 +16,6 @@ class GenericPerms(models.Model):
 
         permissions = (("view_dashboard", "Can view dashboard"),)
 
-auditlog.register(User, exclude_fields=['last_login', 'password'])
+
+auditlog.register(User, exclude_fields=["last_login", "password"])
 auditlog.register(Group)

@@ -65,8 +65,7 @@ coverage_verbose:  ## Run tests with coverage
 	coverage run -m pytest -vs && coverage html
 
 coverage_skip:  ## Run tests with coverage
-	coverage run -m pytest -vs && coverage html
-	# --skip-covered
+	coverage run -m pytest -vs && coverage html --skip-covered
 
 open_coverage:  ## open coverage report
 	open htmlcov/index.html

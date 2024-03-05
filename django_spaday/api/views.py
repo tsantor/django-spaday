@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, Permission, update_last_login
 from django_celery_results.models import TaskResult
 from django_filters.rest_framework import DjangoFilterBackend
 from django_perm_filter import filter_perms
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -44,6 +45,7 @@ User = get_user_model()
 #         return Response(serializer.data)
 
 
+@extend_schema(tags=["spaday"])
 class MyLoginView(LoginView):
     """Override dj_rest_auth LoginView so we can update last_login."""
 
@@ -52,6 +54,7 @@ class MyLoginView(LoginView):
         update_last_login(None, self.user)
 
 
+@extend_schema(tags=["spaday"])
 class UserViewSet(MyModelViewSet):
     http_method_names = ["get", "post", "put", "delete"]
     queryset = User.objects.all().order_by("last_name")
@@ -86,7 +89,12 @@ class UserViewSet(MyModelViewSet):
     @action(detail=False, methods=["get"], url_path=r"recent-logins")
     def recent_logins(self, request):
         if request.user.is_superuser:
-            recent_users = User.objects.exclude(last_login__isnull=True, is_staff=False).order_by("-last_login")[:10]
+            recent_users = User.objects.exclude(
+                last_login__isnull=True,
+                is_staff=False,
+            ).order_by(
+                "-last_login"
+            )[:10]
         else:
             # TODO: Clean this up as not all users have a company
             if hasattr(request.user, "company"):
@@ -101,6 +109,7 @@ class UserViewSet(MyModelViewSet):
         return Response(serializer.data)
 
 
+@extend_schema(tags=["spaday"])
 class GroupViewSet(MyModelViewSet):
     http_method_names = ["get", "post", "put", "delete"]
     queryset = Group.objects.all().order_by("name")
@@ -122,7 +131,10 @@ class GroupViewSet(MyModelViewSet):
     def users(self, request, pk=None):
         """Return all users in this Group."""
         obj = self.get_object()
-        serializer = self.get_serializer(obj.user_set.all().order_by("last_name", "first_name"), many=True)
+        serializer = self.get_serializer(
+            obj.user_set.all().order_by("last_name", "first_name"),
+            many=True,
+        )
         return Response(serializer.data)
 
     @action(detail=True, methods=["post"], url_path=r"add-users")
@@ -147,6 +159,7 @@ class GroupViewSet(MyModelViewSet):
         return Response(serializer.data)
 
 
+@extend_schema(tags=["spaday"])
 class PermissionViewSet(GenericViewSet):
     queryset = filter_perms(Permission.objects.all())
     serializer_class = PermissionSerializer
@@ -158,6 +171,7 @@ class PermissionViewSet(GenericViewSet):
         return Response(permissions_as_combobox(self.get_queryset()))
 
 
+@extend_schema(tags=["spaday"])
 class LogEntryViewSet(MyModelViewSet):
     """Integration with django-auditlog."""
 
@@ -178,6 +192,7 @@ class LogEntryViewSet(MyModelViewSet):
     filterset_class = LogEntryFilter
 
 
+@extend_schema(tags=["spaday"])
 class TaskResultViewSet(MyModelViewSet):
     """Integration with django-celery-results."""
 

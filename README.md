@@ -1,4 +1,5 @@
 # Django SPA Day
+
 A Django package that provides "out-of-the-box" basic auth, user, group, and
 permission APIs for use in Single Page Apps (eg - Vue, React).
 
@@ -8,14 +9,15 @@ So easy, you can take a SPA day!
 version may potentially have breaking changes.
 
 ## Features
+
 - Auth
 - User management w/permissions
 - Group management w/permissions
 - Audit Log
 - Django Celery Results
 
-
 ## Requirements
+
 Assumes you have started from this [cookiecutter-django](https://github.com/tsantor/cookiecutter-django) template which leverages the following.
 
 - djangorestframework
@@ -43,6 +45,7 @@ INSTALLED_APPS = (
 ### Settings
 
 In `config/api_router.py` add the API urls:
+
 ```
 urlpatterns = [
     path("", include("django_spaday.api.urls")),
@@ -52,6 +55,7 @@ urlpatterns = [
 ```
 
 In `config/settings/base.py` ensure your `dj-rest-auth` settings include the following:
+
 ```
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "django_spaday.api.serializers.UserAuthSerializer",
@@ -66,6 +70,7 @@ REST_USE_JWT = True
 > NOTE: This is imporatant as it will provide the frontend app with the logged in User's permissions, etc.
 
 ## Development
+
 1. `make env`
 1. `python3 -m pip install -r requirements_dev.txt`
 1. `python3 -m pip install -r requirements.txt`

@@ -66,7 +66,7 @@ def import_from_string(val, setting_name):
     try:
         return import_string(val)
     except ImportError as e:
-        msg = "Could not import '%s' for API setting '%s'. %s: %s." % (
+        msg = "Could not import '{}' for API setting '{}'. {}: {}.".format(
             val,
             setting_name,
             e.__class__.__name__,

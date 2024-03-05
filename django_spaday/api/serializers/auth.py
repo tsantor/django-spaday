@@ -119,16 +119,14 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def get_initials(self, instance) -> str:
-        if instance.first_name and instance.last_name:
-            first_name = instance.first_name[0]
-            last_name = instance.last_name[0]
-            return f"{first_name}{last_name}".upper()
-        return ""
+        first_name = instance.first_name[0] if instance.first_name else ""
+        last_name = instance.last_name[0] if instance.last_name else ""
+        return f"{first_name}{last_name}".upper()
 
     def get_full_name(self, instance) -> str:
-        if instance.first_name and instance.last_name:
-            return f"{instance.first_name} {instance.last_name}"
-        return ""
+        first_name = instance.first_name or ""
+        last_name = instance.last_name or ""
+        return f"{first_name} {last_name}".strip()
 
     def create(self, validated_data):
         validated_data["email"] = validated_data["email"].lower()
@@ -181,14 +179,11 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
 
-    def validate_old_password(self, value):
-        user = self.context["request"].user
-        if not user.check_password(value):
-            raise serializers.ValidationError({"old_password": "Old password is not correct"})
-        return value
-
-    # def create(self, validated_data):
-    #     print("Do not call me")
+    # def validate_old_password(self, value):
+    #     user = self.context["request"].user
+    #     if not user.check_password(value):
+    #         raise serializers.ValidationError({"old_password": "Old password is not correct"})
+    #     return value
 
     def update(self, instance, validated_data):
         instance.set_password(validated_data["password"])

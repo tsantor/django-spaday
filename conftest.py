@@ -2,8 +2,6 @@ import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
-import factories
-
 User = get_user_model()
 
 # @pytest.fixture(scope="session")
@@ -43,7 +41,7 @@ def staff():
 
 @pytest.fixture
 def superuser():
-    return factories.UserFactory(
+    return User.objects.create_user(
         first_name="Super",
         last_name="User",
         username="superuser@test.com",
@@ -61,6 +59,13 @@ def api_client():
 
 @pytest.fixture
 def authenticated_client(api_client, user):
+    """Authenticate the API client with the test user."""
+    api_client.login(username=user.username, password="testpass")
+    return api_client
+
+
+@pytest.fixture
+def user_authenticated_client(api_client, user):
     """Authenticate the API client with the test user."""
     api_client.login(username=user.username, password="testpass")
     return api_client

@@ -2,17 +2,6 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-# from rest_framework.test import APIClient
-# from myapp.factories import UserFactory
-
-# @pytest.fixture
-# def api_client():
-#     return APIClient()
-
-# @pytest.fixture
-# def user(db):
-#     return UserFactory(password='password')
-
 
 @pytest.mark.django_db
 class TestLoginView:
@@ -42,9 +31,8 @@ class TestLoginView:
         assert "initials" in response.data["user"]
         assert "full_name" in response.data["user"]
 
-        # TDOD: test last_login is failing?
-        # user.refresh_from_db()
-        # assert user.last_login is not None
+        user.refresh_from_db()
+        assert user.last_login is not None
 
     def test_logout(self, authenticated_client):
         url = reverse("api:rest_logout")
@@ -131,7 +119,7 @@ class TestUserViewSet:
         response = superuser_authenticated_client.get(reverse("api:users-recent-logins"))
         assert response.status_code == status.HTTP_200_OK
         # TODO: Getting empty results as if last_login is not being updated
-        print(response.data)
+        # print(response.data)
         # assert len(response.data) >= 1
 
 
@@ -195,37 +183,34 @@ class TestPermissionViewSet:
         assert len(response.data) >= 1
 
 
-# @pytest.mark.django_db
-# class TestLogEntryViewSet:
+@pytest.mark.django_db
+class TestLogEntryViewSet:
 
-#     def test_list(self, authenticated_client, log_entry):
-#         url = reverse("api:auditlogs-list")
-#         response = authenticated_client.get(url)
+    def test_list(self, authenticated_client, log_entry):
+        url = reverse("api:auditlogs-list")
+        response = authenticated_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data["results"]) >= 1
 
-#         # print(response.raw)
-#         # print(response.data["results"])
-#         assert response.status_code == status.HTTP_200_OK
-#         # assert len(response.data["results"]) >= 1
+    def test_retrieve(self, authenticated_client, log_entry):
+        url = reverse("api:auditlogs-detail", kwargs={"pk": log_entry.pk})
+        response = authenticated_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
 
-#     # def test_retrieve(self, authenticated_client, log_entry):
-#     #     url = reverse("api:auditlogs-detail", kwargs={"pk": log_entry.pk})
-#     #     response = authenticated_client.get(url)
-#     #     assert response.status_code == status.HTTP_200_OK
+    def test_pre_delete(self, authenticated_client, log_entry):
+        url = reverse("api:auditlogs-pre-delete", kwargs={"pk": log_entry.pk})
+        response = authenticated_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
 
-#     # def test_pre_delete(self, authenticated_client, log_entry):
-#     #     url = reverse("api:auditlogs-pre-delete", kwargs={"pk": log_entry.pk})
-#     #     response = authenticated_client.get(url)
-#     #     assert response.status_code == status.HTTP_200_OK
+        assert "deleted_objects" in response.data
+        assert "model_count" in response.data
+        assert "protected" in response.data
+        assert "model" in response.data
 
-#     #     assert "deleted_objects" in response.data
-#     #     assert "model_count" in response.data
-#     #     assert "protected" in response.data
-#     #     assert "model" in response.data
-
-#     # def test_delete(self, authenticated_client, log_entry):
-#     #     url = reverse("api:auditlogs-detail", kwargs={"pk": log_entry.pk})
-#     #     response = authenticated_client.delete(url)
-#     #     assert response.status_code == status.HTTP_204_NO_CONTENT
+    def test_delete(self, authenticated_client, log_entry):
+        url = reverse("api:auditlogs-detail", kwargs={"pk": log_entry.pk})
+        response = authenticated_client.delete(url)
+        assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
 @pytest.mark.django_db
