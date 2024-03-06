@@ -1,3 +1,42 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-spaday"
+description = "A Django package that provides 'out-of-the-box' JWT auth, user, group, and permission APIs for use in Single Page Apps (eg - Vue, React)."
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "django>=4.0,<5.0",
+  "drf-spectacular",
+  "django-auditlog",
+  "django-celery-results",
+  "django-filter",
+  "django-perm-filter",
+]
+
+dynamic = ["version", "readme"]
+requires-python = ">=3.10"
+authors = [{ name = "Tim Santor", email = "tsantor@xstudios.com" }]
+
+[project.optional-dependencies]
+dev = ["black", "pre-commit"]
+
+[tool.setuptools.packages.find]
+# https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = { attr = "django_spaday.__version__" }
+readme = { file = ["README.md", "HISTORY.md"], content-type = "text/markdown" }
+
 # ==== pytest ====
 [tool.pytest.ini_options]
 minversion = "6.0"

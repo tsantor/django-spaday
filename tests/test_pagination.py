@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from django_spaday.tests.factories import UserFactory
+from tests.factories import UserFactory
 
 
 @pytest.mark.django_db

@@ -31,25 +31,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Our app
-    "django_spaday",
-    # if your app has other dependencies that need to be added to the site
-    # they should be added here
     # These apps replicate a simple Django Cookiecutter setup as SPA Day
     # assumes you are starting from there.
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
+    "auditlog",
+    "corsheaders",
     "rest_framework",
     # "rest_framework.authtoken",
-    "corsheaders",
+    "rest_framework_simplejwt",
     "drf_spectacular",
     "dj_rest_auth",
-    "rest_framework_simplejwt",
-    "auditlog",
-    "django_perm_filter",
     "django_celery_results",
     "django_extensions",
+    # Our other app
+    "django_perm_filter",
+    # This app is the one we are testing
+    "django_spaday",
 ]
 
 MIDDLEWARE = [
@@ -62,10 +58,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "auditlog.middleware.AuditlogMiddleware",  # auditlog
-    "allauth.account.middleware.AccountMiddleware",  # allauth
 ]
 
-ROOT_URLCONF = "tests.urls"
+ROOT_URLCONF = "django_project.urls"
 
 TEMPLATES = [
     {
@@ -85,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "tests.wsgi.application"
+WSGI_APPLICATION = "django_project.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -124,8 +119,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-# USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -140,20 +133,7 @@ STATIC_URL = "/static/"
 SITE_ID = 1
 
 # MIGRATIONS
-# MIGRATION_MODULES = {"sites": "contrib.sites.migrations"}
-
-# django-allauth
-# -------------------------------------------------------------------------------
-AUTHENTICATION_BACKENDS = [
-    "allauth.account.auth_backends.AuthenticationBackend",
-    "django.contrib.auth.backends.ModelBackend",
-]
-
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "optional"
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_UNIQUE_EMAIL = True
+# MIGRATION_MODULES = {"sites": "django_project.contrib.sites.migrations"}
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
@@ -211,3 +191,32 @@ CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = ["http://localhost:8080"]
+
+# -------------------------------------------------------------------------------
+# Perm Filer
+# -------------------------------------------------------------------------------
+PERM_FILTER = {
+    "HIDE_PERMS": [
+        # Django built-in apps
+        "admin",
+        "contenttypes",
+        "sessions",
+        "sites",
+        # All-auth
+        "account",
+        "socialaccount",
+        # Django built-in auth permissions
+        "auth.view_permission",
+        "auth.add_permission",
+        "auth.change_permission",
+        "auth.delete_permission",
+    ],
+    "UNREGISTER_MODELS": [
+        "django.contrib.sites.models.Site",
+        # All-auth
+        "allauth.account.models.EmailAddress",
+        "allauth.socialaccount.models.SocialAccount",
+        "allauth.socialaccount.models.SocialApp",
+        "allauth.socialaccount.models.SocialToken",
+    ],
+}

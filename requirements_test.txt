@@ -7,4 +7,4 @@ mock==5.1.0
 pytest==8.0.2
 pytest-django==4.8.0
 tox==4.13.0
-factory-boy
+factory-boy==3.3.0

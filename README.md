@@ -1,82 +1,120 @@
 # Django SPA Day
 
-A Django package that provides "out-of-the-box" basic auth, user, group, and
-permission APIs for use in Single Page Apps (eg - Vue, React).
+A Django package that provides "out-of-the-box" basic auth, user, group, and permission APIs for use in Single Page Apps (eg - Vue, React).
 
 So easy, you can take a SPA day!
 
-`django-spaday` deliberately stays below version 1.x.x to signal that every new
-version may potentially have breaking changes.
+`django-spaday` deliberately stays below version 1.x.x to signal that every new version may potentially have breaking changes.
+
+> NOTE: `django-spaday` is _very_ opinionated as its for internal use.
 
 ## Features
 
-- Auth
+- Auth (login/logout/change password)
 - User management w/permissions
 - Group management w/permissions
-- Audit Log
-- Django Celery Results
+- Audit Log (optional)
+- Django Celery Results (optional)
 
 ## Requirements
 
 Assumes you have started from this [cookiecutter-django](https://github.com/tsantor/cookiecutter-django) template which leverages the following.
 
-- djangorestframework
-- djangorestframework-simplejwt
 - dj-rest-auth
 - django-auditlog
+- django-celery-results
+- django-cors-headers
+- django-filter
+- djangorestframework
+- djangorestframework-simplejwt
+- django-perm-filter
 
 ## Quickstart
 
 Install Django SPA Day:
 
 ```bash
-pip install django-spaday
+python3 -m pip install django-spaday
 ```
 
 Add it to your `INSTALLED_APPS`:
 
 ```python
 INSTALLED_APPS = (
-    'django_spaday',
     ...
+    'django_spaday',
 )
 ```
 
 ### Settings
 
+In `config/urls.py` add the urls:
+
+```python
+urlpatterns = [
+    path(r"djadmin/", admin.site.urls),
+    ...
+    path("", include("django_spaday.urls")),
+]
+```
+
 In `config/api_router.py` add the API urls:
 
-```
+```python
 urlpatterns = [
     path("", include("django_spaday.api.urls")),
     # Place all your app's API URLS here.
     ...
+    path("auth/", include("dj_rest_auth.urls")),
 ]
 ```
 
 In `config/settings/base.py` ensure your `dj-rest-auth` settings include the following:
 
-```
-REST_AUTH_SERIALIZERS = {
+```python
+REST_AUTH = {
+    "USE_JWT": True,
+    "SESSION_LOGIN": False,
+    "TOKEN_MODEL": None,
     "USER_DETAILS_SERIALIZER": "django_spaday.api.serializers.UserAuthSerializer",
-    ...
+    "JWT_AUTH_HTTPONLY": False,  # False means js can access the cookie
 }
-
-REST_AUTH_TOKEN_MODEL = None
-REST_SESSION_LOGIN = False
-REST_USE_JWT = True
 ```
 
 > NOTE: This is imporatant as it will provide the frontend app with the logged in User's permissions, etc.
 
-## Development
+### Overrides
+
+These are the `SPA_DAY` defaults and do not need to be specified in `settings` unless you wish to override.
+
+```python
+SPA_DAY = {
+    "PERMISSION_SERIALIZER": "django_spaday.api.serializers.PermissionListSerializer",
+    "USER_SERIALIZER": "django_spaday.api.serializers.UserSerializer",
+    "GROUP_SERIALIZER": "django_spaday.api.serializers.GroupSerializer",
+    "CHANGE_PASSWORD_SERIALIZER": "django_spaday.api.serializers.ChangePasswordSerializer",
+    "USER_AUTH_SERIALIZER": "django_spaday.api.serializers.UserAuthSerializer",
+    "LAST_LOGIN_SERIALIZER": "django_spaday.api.serializers.LastLoginSerializer",
+}
+```
+
+## Local Development
 
 1. `make env`
-1. `python3 -m pip install -r requirements_dev.txt`
-1. `python3 -m pip install -r requirements.txt`
-1. `python manage.py makemigrations`
-1. `python manage.py migrate`
-1. `python manage.py runserver`
+1. `make reqs`
+1. `make makemigrations`
+1. `make migrate`
+1. `make superuser`
+1. `make serve`
 
-Visit `http://127.0.0.1:8000/djadmin/` for the Django Admin
-Visit `http://127.0.0.1:8000/admin/` for the Vue Admin
+- Visit `http://127.0.0.1:8000/djadmin/` for the Django Admin
+- Visit `http://127.0.0.1:8000/admin/` for the Vue Admin
+- Visit `http://127.0.0.1:8000/api/docs/` for the API docs
+
+### Testing
+
+Currently django_spaday has **94%** test coverage.
+
+- Pytest: `make pytest`
+- Coverage: `make coverage`
+  - Open Report: `make open_coverage`
