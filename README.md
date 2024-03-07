@@ -101,14 +101,13 @@ SPA_DAY = {
 ## Local Development
 
 1. `make env`
-1. `make reqs`
-1. `make makemigrations`
+1. `make pip_install`
+1. `make migrations`
 1. `make migrate`
 1. `make superuser`
 1. `make serve`
 
 - Visit `http://127.0.0.1:8000/djadmin/` for the Django Admin
-- Visit `http://127.0.0.1:8000/admin/` for the Vue Admin
 - Visit `http://127.0.0.1:8000/api/docs/` for the API docs
 
 ### Testing
