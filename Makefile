@@ -31,8 +31,8 @@ env:  ## Create virtual environment
 
 reqs:  ## Install requirements
 	python3 -m pip install -U pip && \
-		python -m pip install -r requirements_dev.txt && \
-		python -m pip install -r requirements_test.txt
+		python3 -m pip install -r requirements.txt && \
+		pre-commit install
 
 env_remove:  ## Remove virtual environment
 	pyenv uninstall ${venv}
@@ -72,28 +72,7 @@ tree:  ## Show directory tree
 
 # -----------------------------------------------------------------------------
 # Cleanup
-# -----------------------------------------------------------------------------
-
-clean_build: ## remove build artifacts
-	rm -fr build/ dist/ .eggs/
-	find . -name '*.egg-info' -o -name '*.egg' -exec rm -fr {} +
-
-clean_pyc: ## remove Python file artifacts
-	find . \( -name '*.pyc' -o -name '*.pyo' -o -name '*~' -o -name '__pycache__' \) -exec rm -fr {} +
-
-clean: clean_build clean_pyc ## remove all build, test, coverage and Python artifacts
-
-clean_pytest_cache:  ## clear pytest cache
-	rm -rf .pytest_cache
-
-clean_tox_cache:  ## clear tox cache
-	rm -rf .tox
-
-clean_coverage:  ## clear coverage data
-	coverage erase
-	rm -rf htmlcov
-
-clean_tests: clean_pytest_cache clean_tox_cache clean_coverage  ## clear test cache
+# ----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
 # Testing

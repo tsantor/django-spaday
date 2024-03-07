@@ -19,13 +19,19 @@ class GroupFactory(factory.django.DjangoModelFactory):
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
+        skip_postgeneration_save = True
 
     username = factory.Sequence(lambda n: f"user{n}")
     email = factory.LazyAttribute(lambda obj: f"{obj.username}@example.com")
-    password = factory.PostGenerationMethodCall("set_password", "defaultpassword")
+    # password = factory.PostGenerationMethodCall("set_password", "defaultpassword")
 
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
+
+    @factory.post_generation
+    def password(self, create, extracted, **kwargs):
+        self.set_password("defaultpassword")
+        self.save()
 
 
 class LogEntryFactory(factory.django.DjangoModelFactory):

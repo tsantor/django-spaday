@@ -76,6 +76,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "debug": DEBUG,
         },
     },
 ]
@@ -214,9 +215,9 @@ PERM_FILTER = {
     "UNREGISTER_MODELS": [
         "django.contrib.sites.models.Site",
         # All-auth
-        "allauth.account.models.EmailAddress",
-        "allauth.socialaccount.models.SocialAccount",
-        "allauth.socialaccount.models.SocialApp",
-        "allauth.socialaccount.models.SocialToken",
+        # "allauth.account.models.EmailAddress",
+        # "allauth.socialaccount.models.SocialAccount",
+        # "allauth.socialaccount.models.SocialApp",
+        # "allauth.socialaccount.models.SocialToken",
     ],
 }

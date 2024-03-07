@@ -16,5 +16,5 @@ def test_standard_pagination(authenticated_client):
     assert "end_index" in response.data
     assert "num_results" in response.data
     assert "results" in response.data
-    print(response.data)
+    # print(response.data)
     assert len(response.data["results"]) == 10  # Default page size
