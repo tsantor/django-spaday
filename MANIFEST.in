@@ -5,3 +5,5 @@ include README.md
 
 # include requirements.txt
 # recursive-include django_spaday *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
+
+recursive-include src/django_spaday/templates *.html
