@@ -23,19 +23,23 @@ python_version=3.9.11
 venv=djangospaday_env
 
 # -----------------------------------------------------------------------------
-# Development
+# Environment
 # -----------------------------------------------------------------------------
 
 env:  ## Create virtual environment
 	pyenv virtualenv ${python_version} ${venv} && pyenv local ${venv}
 
-reqs:  ## Install requirements
-	python3 -m pip install -U pip && \
-		python3 -m pip install -r requirements.txt && \
-		pre-commit install
-
 env_remove:  ## Remove virtual environment
 	pyenv uninstall ${venv}
+
+# -----------------------------------------------------------------------------
+# Pip
+# -----------------------------------------------------------------------------
+
+pip_install:  ## install requirements
+	python3 -m pip install -U pip && \
+		python -m pip install -r requirements.txt && \
+		pre-commit install
 
 pip_list:  ## run pip list
 	python3 -m pip list
@@ -43,14 +47,21 @@ pip_list:  ## run pip list
 pip_freeze:  ## run pipfreezer
 	pipfreezer
 
+pip_checker:  ## run pipchecker
+	python3 manage.py pipchecker
+
+# -----------------------------------------------------------------------------
+# Django
+# -----------------------------------------------------------------------------
+
 manage:	## run django manage.py (eg - make manage cmd="shell")
 	python3 manage.py ${cmd}
 
 superuser:  ## Create superuser
 	python3 manage.py createsuperuser
 
-migrations:  ## Create migrations
-	python3 manage.py makemigrations
+migrations:  ## Create migrations (eg - make migrations app="core")
+	python3 manage.py makemigrations ${app}
 
 migrate:  ## Apply migrations
 	python3 manage.py migrate
@@ -66,13 +77,6 @@ shell:  ## run shell
 
 flush:  ## Flush database
 	python3 manage.py flush
-
-tree:  ## Show directory tree
-	tree -I 'build|dist|htmlcov|node_modules|migrations|contrib|__pycache__|*.egg-info'
-
-# -----------------------------------------------------------------------------
-# Cleanup
-# ----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
 # Testing
@@ -95,6 +99,38 @@ coverage_skip:  ## Run tests with coverage
 
 open_coverage:  ## open coverage report
 	open htmlcov/index.html
+
+# -----------------------------------------------------------------------------
+# Cleanup
+# -----------------------------------------------------------------------------
+
+clean_build: ## remove build artifacts
+	rm -fr build/ dist/ .eggs/
+	find . -name '*.egg-info' -o -name '*.egg' -exec rm -fr {} +
+
+clean_pyc: ## remove python file artifacts
+	find . \( -name '*.pyc' -o -name '*.pyo' -o -name '*~' -o -name '__pycache__' \) -exec rm -fr {} +
+
+clean: clean_build clean_pyc ## remove all build and python artifacts
+
+clean_pytest_cache:  ## clear pytest cache
+	rm -rf .pytest_cache
+
+clean_tox_cache:  ## clear tox cache
+	rm -rf .tox
+
+clean_coverage:  ## clear coverage cache
+	rm .coverage
+	rm -rf htmlcov
+
+clean_tests: clean_pytest_cache clean_tox_cache clean_coverage  ## clear pytest, tox, and coverage caches
+
+# -----------------------------------------------------------------------------
+# Miscellaneous
+# -----------------------------------------------------------------------------
+
+tree:  ## Show directory tree
+	tree -I 'build|dist|htmlcov|node_modules|migrations|contrib|__pycache__|*.egg-info|staticfiles|media'
 
 # -----------------------------------------------------------------------------
 # Deploy

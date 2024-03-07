@@ -118,3 +118,71 @@ Currently django_spaday has **94%** test coverage.
 - Pytest: `make pytest`
 - Coverage: `make coverage`
   - Open Report: `make open_coverage`
+
+## Makefile Commands
+
+### Environment
+
+| Command      | Description                |
+| ------------ | -------------------------- |
+| `env`        | Create virtual environment |
+| `env_remove` | Remove virtual environment |
+
+### Pip
+
+| Command       | Description          |
+| ------------- | -------------------- |
+| `pip_install` | install requirements |
+| `pip_list`    | run pip list         |
+| `pip_freeze`  | run pipfreezer       |
+| `pip_checker` | run pipchecker       |
+
+### Django
+
+| Command      | Description                                         |
+| ------------ | --------------------------------------------------- |
+| `manage`     | run django manage.py (eg - make manage cmd="shell") |
+| `superuser`  | Create superuser                                    |
+| `migrations` | Create migrations (eg - make migrations app="core") |
+| `migrate`    | Apply migrations                                    |
+| `serve`      | Run server                                          |
+| `show_urls`  | show urls                                           |
+| `shell`      | run shell                                           |
+| `flush`      | Flush database                                      |
+
+### Testing
+
+| Command            | Description             |
+| ------------------ | ----------------------- |
+| `pytest`           | Run tests               |
+| `pytest_verbose`   | Run tests               |
+| `coverage`         | Run tests with coverage |
+| `coverage_verbose` | Run tests with coverage |
+| `coverage_skip`    | Run tests with coverage |
+| `open_coverage`    | open coverage report    |
+
+### Cleanup
+
+| Command              | Description                            |
+| -------------------- | -------------------------------------- |
+| `clean_build`        | remove build artifacts                 |
+| `clean_pyc`          | remove python file artifacts           |
+| `clean`              | remove all build and python artifacts  |
+| `clean_pytest_cache` | clear pytest cache                     |
+| `clean_tox_cache`    | clear tox cache                        |
+| `clean_coverage`     | clear coverage cache                   |
+| `clean_tests`        | clear pytest, tox, and coverage caches |
+
+### Miscellaneous
+
+| Command | Description         |
+| ------- | ------------------- |
+| `tree`  | Show directory tree |
+
+### Deploy
+
+| Command        | Description                     |
+| -------------- | ------------------------------- |
+| `dist`         | builds source and wheel package |
+| `release_test` | upload package to pypi test     |
+| `release`      | package and upload a release    |
