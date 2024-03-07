@@ -29,6 +29,9 @@ authors = [{ name = "Tim Santor", email = "tsantor@xstudios.com" }]
 [project.optional-dependencies]
 dev = ["black", "pre-commit"]
 
+[project.urls]
+homepage = "https://github.com/tsantor/django-spaday"
+
 [tool.setuptools.packages.find]
 # https://setuptools.pypa.io/en/latest/userguide/datafiles.html
 where = ["src"]

@@ -22,6 +22,7 @@ help:
 python_version=3.9.11
 venv=djangospaday_env
 
+# START - Generic commands
 # -----------------------------------------------------------------------------
 # Environment
 # -----------------------------------------------------------------------------
@@ -137,14 +138,18 @@ tree:  ## Show directory tree
 # -----------------------------------------------------------------------------
 
 dist: clean ## builds source and wheel package
-	python -m build --wheel
+	python -m build --wheel --sdist
 
 release_test: ## upload package to pypi test
-	twine upload dist/* -r pypitest
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 release: dist ## package and upload a release
-	twine upload dist/*
+	twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
 
+check_dist:	## check package
+	twine check dist/*
+
+# END - Generic commands
 # -----------------------------------------------------------------------------
 # Project Specific
 # -----------------------------------------------------------------------------
