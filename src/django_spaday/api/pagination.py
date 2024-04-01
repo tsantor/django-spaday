@@ -1,41 +1,6 @@
 from rest_framework import pagination
 from rest_framework.response import Response
-
-# class StandardPagination(pagination.PageNumberPagination):
-#     page_size = 10
-#     max_page_size = 100
-#     page_size_query_param = "size"
-#     page_query_param = "page"
-
-#     def get_page_links(self):
-#         page_links = self.get_html_context()["page_links"]
-#         return [
-#             {"number": pl.number, "url": pl.url, "is_active": pl.is_active}
-#             for pl in page_links
-#         ]
-
-#     def get_paginated_response(self, data):
-#         return Response(
-#             {
-#                 # "links": {
-#                 #     "next": self.get_next_link(),
-#                 #     "previous": self.get_previous_link(),
-#                 # },
-#                 # "has_next": self.page.has_next(),
-#                 # "has_previous": self.page.has_previous(),
-#                 # "has_other_pages": self.page.has_other_pages(),
-#                 # "next_page_number": self.page.next_page_number(),
-#                 # "previous_page_number": self.page.previous_page_number(),
-#                 "current_page": self.page.number,
-#                 "num_pages": self.page.paginator.num_pages,
-#                 # "page_range": [p for p in self.page.paginator.page_range],
-#                 # "page_links": self.get_page_links(),
-#                 "start_index": self.page.start_index(),
-#                 "end_index": self.page.end_index(),
-#                 "num_results": self.page.paginator.count,
-#                 "results": data,
-#             }
-#         )
+from rest_framework.utils.urls import replace_query_param
 
 
 class StandardPagination(pagination.PageNumberPagination):
@@ -44,14 +9,39 @@ class StandardPagination(pagination.PageNumberPagination):
     page_size_query_param = "size"
     page_query_param = "page"
 
+    def get_first_link(self):
+        """Return the first page link."""
+        url = self.request.build_absolute_uri()
+        page_number = 1
+        return replace_query_param(url, self.page_query_param, page_number)
+
+    def get_last_link(self):
+        """Return the last page link."""
+        url = self.request.build_absolute_uri()
+        page_number = self.page.paginator.num_pages
+        return replace_query_param(url, self.page_query_param, page_number)
+
     def get_paginated_response(self, data):
+        next_page = self.page.next_page_number() if self.page.has_next() else None
+        previous_page = (
+            self.page.previous_page_number() if self.page.has_previous() else None
+        )
+
         return Response(
             {
+                "links": {
+                    "next": self.get_next_link(),
+                    "previous": self.get_previous_link(),
+                    "first": self.get_first_link(),
+                    "last": self.get_last_link(),
+                },
+                "next_page": next_page,
+                "previous_page": previous_page,
                 "current_page": self.page.number,
                 "num_pages": self.page.paginator.num_pages,
-                "start_index": self.page.start_index(),
-                "end_index": self.page.end_index(),
                 "num_results": self.page.paginator.count,
+                # "start_index": self.page.start_index(),
+                # "end_index": self.page.end_index(),
                 "results": data,
             }
         )

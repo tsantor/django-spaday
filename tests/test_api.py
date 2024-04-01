@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework import status
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db()
 class TestLoginView:
     def test_login(self, api_client, user):
         url = reverse("api:rest_login")
@@ -41,9 +41,8 @@ class TestLoginView:
         assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db()
 class TestUserViewSet:
-
     def test_create(self, authenticated_client):
         url = reverse("api:users-list")
         data = {
@@ -116,14 +115,16 @@ class TestUserViewSet:
 
         assert response.status_code == status.HTTP_200_OK
 
-        response = superuser_authenticated_client.get(reverse("api:users-recent-logins"))
+        response = superuser_authenticated_client.get(
+            reverse("api:users-recent-logins")
+        )
         assert response.status_code == status.HTTP_200_OK
         # TODO: Getting empty results as if last_login is not being updated
         # print(response.data)
         # assert len(response.data) >= 1
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db()
 class TestGroupViewSet:
     def test_list(self, authenticated_client, group):
         response = authenticated_client.get(reverse("api:groups-list"))
@@ -151,20 +152,26 @@ class TestGroupViewSet:
         assert response.status_code == status.HTTP_204_NO_CONTENT
 
     def test_users(self, authenticated_client, group):
-        response = authenticated_client.get(reverse("api:groups-users", kwargs={"pk": group.pk}))
-        assert response.status_code == 200
+        response = authenticated_client.get(
+            reverse("api:groups-users", kwargs={"pk": group.pk})
+        )
+        assert response.status_code == status.HTTP_200_OK
 
     def test_add_users(self, authenticated_client, user, group):
         data = {"users": [user.pk]}
-        response = authenticated_client.post(reverse("api:groups-add-users", kwargs={"pk": group.pk}), data)
-        assert response.status_code == 200
+        response = authenticated_client.post(
+            reverse("api:groups-add-users", kwargs={"pk": group.pk}), data
+        )
+        assert response.status_code == status.HTTP_200_OK
         assert user.pk in response.data["users"]
 
     def test_remove_users(self, authenticated_client, user, group):
         group.user_set.add(user)
         data = {"users": [user.pk]}
-        response = authenticated_client.post(reverse("api:groups-remove-users", kwargs={"pk": group.pk}), data)
-        assert response.status_code == 200
+        response = authenticated_client.post(
+            reverse("api:groups-remove-users", kwargs={"pk": group.pk}), data
+        )
+        assert response.status_code == status.HTTP_200_OK
         assert user.pk not in response.data["users"]
 
     def test_combobox(self, authenticated_client, group):
@@ -173,19 +180,18 @@ class TestGroupViewSet:
         assert len(response.data) == 1
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db()
 class TestPermissionViewSet:
     def test_combobox(self, authenticated_client):
         url = reverse("api:permissions-combobox")
         response = authenticated_client.get(url)
-        assert response.status_code == 200
+        assert response.status_code == status.HTTP_200_OK
         assert isinstance(response.data, list)
         assert len(response.data) >= 1
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db()
 class TestLogEntryViewSet:
-
     def test_list(self, authenticated_client, log_entry):
         url = reverse("api:auditlogs-list")
         response = authenticated_client.get(url)
@@ -213,9 +219,8 @@ class TestLogEntryViewSet:
         assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db()
 class TestTaskResultViewSet:
-
     def test_list(self, authenticated_client, task_result):
         url = reverse("api:taskresults-list")
         response = authenticated_client.get(url)

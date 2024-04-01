@@ -39,7 +39,7 @@ env_remove:  ## Remove virtual environment
 
 pip_install:  ## install requirements
 	python3 -m pip install -U pip && \
-		python -m pip install -r requirements.txt && \
+		python3 -m pip install -r requirements.txt && \
 		pre-commit install
 
 pip_list:  ## run pip list

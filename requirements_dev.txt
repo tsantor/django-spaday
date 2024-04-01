@@ -5,8 +5,6 @@ pre-commit==3.6.2
 
 # Bare minimum requirements to provide us similar env to Cookiecutter Django.
 dj-rest-auth==5.0.2
-django-auditlog==2.3.0
-django-celery-results==2.5.1
 django-cors-headers==4.3.1
 django-filter==23.5
 django==4.2.9
@@ -14,6 +12,10 @@ djangorestframework-simplejwt==5.3.1
 djangorestframework==3.14.0
 drf-spectacular==0.27.1
 django-extensions==3.2.3
+
+# Spa Day integrates with the following
+django-auditlog==2.3.0
+django-celery-results==2.5.1
 
 ## X Studios
 pip-freezer==0.3.5

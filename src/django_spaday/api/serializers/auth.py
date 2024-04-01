@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import Permission
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
@@ -130,7 +131,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data["email"] = validated_data["email"].lower()
-        if "username" in User._meta.get_fields():
+        if "username" in User._meta.get_fields():  # noqa: SLF001
             validated_data["username"] = validated_data["email"]
         password = validated_data.pop("password")
         # groups = validated_data.pop("groups")
@@ -149,7 +150,7 @@ class UserSerializer(serializers.ModelSerializer):
         if "email" in validated_data:
             validated_data["email"] = validated_data["email"].lower()
 
-        if "username" in User._meta.get_fields():
+        if "username" in User._meta.get_fields():  # noqa: SLF001
             validated_data["username"] = validated_data.pop("email", None)
 
         # groups = validated_data.pop("groups")
@@ -160,13 +161,15 @@ class UserSerializer(serializers.ModelSerializer):
 
         # user.groups.set(list(groups))
         # user.user_permissions.set(list(permissions))
-        return user
+        return user  # noqa: RET504
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     """This can be overriden in the SPA_DAY settings."""
 
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
     password2 = serializers.CharField(write_only=True, required=True)
     # old_password = serializers.CharField(write_only=True, required=True)
 
@@ -176,7 +179,9 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."}
+            )
         return attrs
 
     # def validate_old_password(self, value):
@@ -214,17 +219,13 @@ class UserAuthSerializer(serializers.ModelSerializer):
         )
 
     def get_permissions_codenames(self, instance) -> list:
-        return sorted(list(instance.get_all_permissions()))
+        return sorted(instance.get_all_permissions())
 
     def get_initials(self, instance) -> str:
-        if instance.first_name and instance.last_name:
-            first_name = instance.first_name[0]
-            last_name = instance.last_name[0]
-            return f"{first_name}{last_name}".upper()
+        return instance.initials
 
     def get_full_name(self, instance) -> str:
-        if instance.first_name and instance.last_name:
-            return f"{instance.first_name} {instance.last_name}"
+        return instance.display_name
 
 
 class LastLoginSerializer(serializers.ModelSerializer):

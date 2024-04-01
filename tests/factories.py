@@ -38,7 +38,9 @@ class LogEntryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LogEntry
 
-    content_type = factory.LazyAttribute(lambda _: ContentType.objects.get_for_model(User))
+    content_type = factory.LazyAttribute(
+        lambda _: ContentType.objects.get_for_model(User)
+    )
     # content_type = factory.SubFactory(ContentTypeFactory)
     object_pk = factory.Faker("pyint")
     object_repr = factory.Faker("word")

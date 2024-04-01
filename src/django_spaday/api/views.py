@@ -1,7 +1,9 @@
 from auditlog.models import LogEntry
 from dj_rest_auth.views import LoginView
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, Permission, update_last_login
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import Permission
+from django.contrib.auth.models import update_last_login
 from django_celery_results.models import TaskResult
 from django_filters.rest_framework import DjangoFilterBackend
 from django_perm_filter import filter_perms
@@ -12,16 +14,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from ..settings import api_settings
-from ..utils import permissions_as_combobox
+from django_spaday.settings import api_settings
+from django_spaday.utils import permissions_as_combobox
+
 from .pagination import StandardPagination
-from .serializers import (
-    GroupAddUserSerializer,
-    GroupRemoveUserSerializer,
-    LogEntrySerializer,
-    PermissionSerializer,
-    TaskResultSerializer,
-)
+from .serializers import GroupAddUserSerializer
+from .serializers import GroupRemoveUserSerializer
+from .serializers import LogEntrySerializer
+from .serializers import PermissionSerializer
+from .serializers import TaskResultSerializer
 from .serializers.filters import LogEntryFilter
 from .viewsets import MyModelViewSet
 
@@ -92,19 +93,15 @@ class UserViewSet(MyModelViewSet):
             recent_users = User.objects.exclude(
                 last_login__isnull=True,
                 is_staff=False,
-            ).order_by(
-                "-last_login"
-            )[:10]
+            ).order_by("-last_login")[:10]
+        elif hasattr(request.user, "company"):
+            recent_users = (
+                User.objects.filter(company=request.user.company)
+                .exclude(last_login__isnull=True, is_staff=False)
+                .order_by("-last_login")[:10]
+            )
         else:
-            # TODO: Clean this up as not all users have a company
-            if hasattr(request.user, "company"):
-                recent_users = (
-                    User.objects.filter(company=request.user.company)
-                    .exclude(last_login__isnull=True, is_staff=False)
-                    .order_by("-last_login")[:10]
-                )
-            else:
-                recent_users = User.objects.filter(pk=request.user.pk, is_staff=True)
+            recent_users = User.objects.filter(pk=request.user.pk, is_staff=True)
         serializer = self.get_serializer(recent_users, many=True)
         return Response(serializer.data)
 
