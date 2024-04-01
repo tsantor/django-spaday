@@ -91,6 +91,7 @@ pytest_verbose:  ## Run tests
 
 coverage:  ## Run tests with coverage
 	coverage run -m pytest && coverage html
+	# pytest --cov=django_project --cov=src --cov-report html -vs
 
 coverage_verbose:  ## Run tests with coverage
 	coverage run -m pytest -vs && coverage html

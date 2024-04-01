@@ -15,6 +15,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+SECRET_KEY = "l@9#%jt=3@#%xj1+$$hl_i+0m*r&l$_hknv&qas*1eyf)md%im"  # noqa: S105
+
 # Application definition
 
 INSTALLED_APPS = [

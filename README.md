@@ -112,7 +112,7 @@ SPA_DAY = {
 
 ### Testing
 
-Currently django_spaday has **94%** test coverage.
+Currently django_spaday has **95%** test coverage.
 
 - Pytest: `make pytest`
 - Coverage: `make coverage`
