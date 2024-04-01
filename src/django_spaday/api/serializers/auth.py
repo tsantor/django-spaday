@@ -222,10 +222,16 @@ class UserAuthSerializer(serializers.ModelSerializer):
         return sorted(instance.get_all_permissions())
 
     def get_initials(self, instance) -> str:
-        return instance.initials
+        if hasattr(instance, "initials"):
+            return instance.initials
+        first_name = instance.first_name[0] if instance.first_name else "?"
+        last_name = instance.last_name[0] if instance.last_name else "?"
+        return f"{first_name}{last_name}".upper()
 
     def get_full_name(self, instance) -> str:
-        return instance.display_name
+        if hasattr(instance, "full_name"):
+            return instance.full_name
+        return instance.email
 
 
 class LastLoginSerializer(serializers.ModelSerializer):
