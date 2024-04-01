@@ -47,10 +47,11 @@ addopts = "--ds=django_project.settings --reuse-db"
 python_files = ["tests.py", "test_*.py"]
 norecursedirs = ["node_modules"]
 filterwarnings = "ignore::DeprecationWarning"
+pythonpath = "src"
 
 # ==== Coverage ====
 [tool.coverage.run]
-include = ["django_project/**"]
+include = ["*/django_spaday/**/*.py"]
 omit = ["*/migrations/*", "*/tests/*"]
 plugins = ["django_coverage_plugin"]
 

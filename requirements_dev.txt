@@ -17,5 +17,5 @@ django-extensions==3.2.3
 django-auditlog==2.3.0
 django-celery-results==2.5.1
 
-## X Studios
+# X Studios
 pip-freezer==0.3.5
