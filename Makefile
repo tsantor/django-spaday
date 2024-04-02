@@ -143,7 +143,7 @@ tree:  ## Show directory tree
 dist: clean ## builds source and wheel package
 	python -m build --wheel --sdist
 
-release_test: ## upload package to pypi test
+release_test: dist ## upload package to pypi test
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 release: dist ## package and upload a release
