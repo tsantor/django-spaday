@@ -9,6 +9,7 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Natural Language :: English",
+  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -26,11 +27,15 @@ dynamic = ["version", "readme"]
 requires-python = ">=3.9"
 authors = [{ name = "Tim Santor", email = "tsantor@xstudios.com" }]
 
-[project.optional-dependencies]
-dev = ["black", "pre-commit"]
-
 [project.urls]
-homepage = "https://github.com/tsantor/django-spaday"
+# Homepage = "https://example.com"
+# Documentation = "https://readthedocs.org"
+Repository = "https://github.com/tsantor/django-spaday.git"
+Issues = "https://github.com/tsantor/django-spaday/issues"
+Changelog = "https://github.com/tsantor/django-spaday/blob/master/HISTORY.md"
+
+[project.optional-dependencies]
+dev = []
 
 [tool.setuptools.packages.find]
 # https://setuptools.pypa.io/en/latest/userguide/datafiles.html

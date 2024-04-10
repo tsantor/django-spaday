@@ -1,5 +1,9 @@
 # Django SPA Day
 
+![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)
+
+<!-- ![Code Style](https://img.shields.io/badge/code_style-ruff-black) -->
+
 A Django package that provides "out-of-the-box" basic auth, user, group, and permission APIs for use in Single Page Apps (eg - Vue, React).
 
 So easy, you can take a SPA day!
@@ -98,90 +102,28 @@ SPA_DAY = {
 }
 ```
 
-## Local Development
+```bash
+make env
+make pip_install
+make migrations
+make migrate
+make superuser
+make serve
+```
 
-1. `make env`
-1. `make pip_install`
-1. `make migrations`
-1. `make migrate`
-1. `make superuser`
-1. `make serve`
+or simply `make from_scratch`
 
 - Visit `http://127.0.0.1:8000/djadmin/` for the Django Admin
 - Visit `http://127.0.0.1:8000/api/docs/` for the API docs
 
 ### Testing
 
-Currently django_spaday has **95%** test coverage.
+```bash
+make pytest
+make coverage
+make open_coverage
+```
 
-- Pytest: `make pytest`
-- Coverage: `make coverage`
-  - Open Report: `make open_coverage`
+## Issues
 
-## Makefile Commands
-
-### Environment
-
-| Command      | Description                |
-| ------------ | -------------------------- |
-| `env`        | Create virtual environment |
-| `env_remove` | Remove virtual environment |
-
-### Pip
-
-| Command       | Description          |
-| ------------- | -------------------- |
-| `pip_install` | install requirements |
-| `pip_list`    | run pip list         |
-| `pip_freeze`  | run pipfreezer       |
-| `pip_checker` | run pipchecker       |
-
-### Django
-
-| Command      | Description                                         |
-| ------------ | --------------------------------------------------- |
-| `manage`     | run django manage.py (eg - make manage cmd="shell") |
-| `superuser`  | Create superuser                                    |
-| `migrations` | Create migrations (eg - make migrations app="core") |
-| `migrate`    | Apply migrations                                    |
-| `serve`      | Run server                                          |
-| `show_urls`  | show urls                                           |
-| `shell`      | run shell                                           |
-| `flush`      | Flush database                                      |
-
-### Testing
-
-| Command            | Description             |
-| ------------------ | ----------------------- |
-| `pytest`           | Run tests               |
-| `pytest_verbose`   | Run tests               |
-| `coverage`         | Run tests with coverage |
-| `coverage_verbose` | Run tests with coverage |
-| `coverage_skip`    | Run tests with coverage |
-| `open_coverage`    | open coverage report    |
-
-### Cleanup
-
-| Command              | Description                            |
-| -------------------- | -------------------------------------- |
-| `clean_build`        | remove build artifacts                 |
-| `clean_pyc`          | remove python file artifacts           |
-| `clean`              | remove all build and python artifacts  |
-| `clean_pytest_cache` | clear pytest cache                     |
-| `clean_tox_cache`    | clear tox cache                        |
-| `clean_coverage`     | clear coverage cache                   |
-| `clean_tests`        | clear pytest, tox, and coverage caches |
-
-### Miscellaneous
-
-| Command | Description         |
-| ------- | ------------------- |
-| `tree`  | Show directory tree |
-
-### Deploy
-
-| Command        | Description                     |
-| -------------- | ------------------------------- |
-| `dist`         | builds source and wheel package |
-| `release_test` | upload package to pypi test     |
-| `release`      | package and upload a release    |
+If you experience any issues, please create an [issue](https://github.com/tsantor/django-spaday/issues) on Github.

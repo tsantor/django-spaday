@@ -12,6 +12,7 @@ djangorestframework-simplejwt==5.3.1
 djangorestframework==3.14.0
 drf-spectacular==0.27.1
 django-extensions==3.2.3
+django-perm-filter
 
 # Spa Day integrates with the following
 django-auditlog==2.3.0
