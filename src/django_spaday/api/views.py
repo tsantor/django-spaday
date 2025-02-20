@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import update_last_login
+from django.contrib.auth.signals import user_logged_in
 from django_celery_results.models import TaskResult
 from django_filters.rest_framework import DjangoFilterBackend
 from django_perm_filter import filter_perms
@@ -53,6 +54,9 @@ class MyLoginView(LoginView):
     def login(self):
         super().login()
         update_last_login(None, self.user)
+        user_logged_in.send(
+            sender=self.user.__class__, request=self.request, user=self.user
+        )
 
 
 @extend_schema(tags=["spaday"])
